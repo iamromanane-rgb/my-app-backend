@@ -30,7 +30,8 @@ public class SecurityConfig {
         config.setAllowedOrigins(List.of(
                 "http://localhost:3000",
                 "http://localhost:3001",
-                "https://my-app-frontend-chi.vercel.app"
+                "https://my-app-frontend-chi.vercel.app",
+                "https://my-app-frontend-mdi5088jw-iamromanane-rgbs-projects.vercel.app"
         ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));

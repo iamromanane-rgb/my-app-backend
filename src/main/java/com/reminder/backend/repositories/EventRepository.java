@@ -1,6 +1,8 @@
 package com.reminder.backend.repositories;
 
 import com.reminder.backend.models.Event;
+
+import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,9 +22,11 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     List<Event> findByUserIdAndEventDateBetween(Long userId, LocalDate startDate, LocalDate endDate);
 
     List<Event> findByUserIdAndDescriptionContainingIgnoreCase(Long userId, String keyword);
-
-    void deleteByUserId(Long userId);
-
+    
+    @Modifying
+    @Query("DELETE FROM Event e WHERE e.user.id = :userId")
+    void deleteByUserId(@Param("userId") Long userId);
+    
     @Query("SELECT e FROM Event e WHERE EXTRACT(MONTH FROM e.eventDate) = :month AND EXTRACT(DAY FROM e.eventDate) = :day")
     List<Event> findByMonthAndDay(@Param("month") int month, @Param("day") int day);
 }

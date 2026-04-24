@@ -25,11 +25,6 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     List<Event> findByUserIdAndDescriptionContainingIgnoreCase(Long userId, String keyword);
     
-    @Transactional
-    @Modifying
-    @Query("DELETE FROM Event e WHERE e.user.id = :userId")
-    void deleteByUserId(@Param("userId") Long userId);
-    
     @Query("SELECT e FROM Event e WHERE EXTRACT(MONTH FROM e.eventDate) = :month AND EXTRACT(DAY FROM e.eventDate) = :day")
     List<Event> findByMonthAndDay(@Param("month") int month, @Param("day") int day);
 }

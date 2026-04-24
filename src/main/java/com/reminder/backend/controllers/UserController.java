@@ -142,7 +142,6 @@ public class UserController {
             return ResponseEntity.status(403).build();
         }
         return userRepository.findById(id).map(user -> {
-            eventRepository.deleteByUserId(id);
             userRepository.delete(user);
             return ResponseEntity.ok().build();
         }).orElse(ResponseEntity.notFound().build());

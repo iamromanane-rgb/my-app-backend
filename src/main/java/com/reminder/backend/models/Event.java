@@ -2,6 +2,9 @@ package com.reminder.backend.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import java.time.LocalDate;
 
 @Entity
@@ -23,6 +26,7 @@ public class Event {
 
     @ManyToOne
     @JoinColumn(name ="user_id",nullable =false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
 

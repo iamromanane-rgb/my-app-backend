@@ -27,4 +27,17 @@ public interface EventRepository extends JpaRepository<Event, Long> {
     
     @Query("SELECT e FROM Event e WHERE EXTRACT(MONTH FROM e.eventDate) = :month AND EXTRACT(DAY FROM e.eventDate) = :day")
     List<Event> findByMonthAndDay(@Param("month") int month, @Param("day") int day);
+    
+    // Optimized query for upcoming events - filters at database level for performance
+    @Query("""
+        SELECT e FROM Event e 
+        ORDER BY 
+            CASE 
+                WHEN MONTH(CAST(e.eventDate AS date)) > MONTH(CAST(:today AS date)) 
+                     OR (MONTH(CAST(e.eventDate AS date)) = MONTH(CAST(:today AS date)) AND DAY(CAST(e.eventDate AS date)) >= DAY(CAST(:today AS date))) 
+                THEN CONCAT(YEAR(CAST(:today AS date)), '-', LPAD(CAST(MONTH(CAST(e.eventDate AS date)) AS text), 2, '0'), '-', LPAD(CAST(DAY(CAST(e.eventDate AS date)) AS text), 2, '0'))
+                ELSE CONCAT(YEAR(CAST(:today AS date)) + 1, '-', LPAD(CAST(MONTH(CAST(e.eventDate AS date)) AS text), 2, '0'), '-', LPAD(CAST(DAY(CAST(e.eventDate AS date)) AS text), 2, '0'))
+            END ASC
+    """)
+    List<Event> findUpcomingEvents(@Param("today") LocalDate today);
 }

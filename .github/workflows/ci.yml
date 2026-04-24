@@ -34,6 +34,10 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
+          java-package: jdk
+      
+      - name: Verify Java Version
+        run: java -version && javac -version
       
       - name: Wait for PostgreSQL
         run: |

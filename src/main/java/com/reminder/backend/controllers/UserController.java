@@ -5,8 +5,10 @@ import com.reminder.backend.admin.AdminAccessService;
 import com.reminder.backend.login.LoginResponse;
 import com.reminder.backend.models.AccessLevel;
 import com.reminder.backend.models.User;
+import com.reminder.backend.repositories.EventRepository;
 import com.reminder.backend.repositories.UserRepository;
 import com.reminder.backend.users.CreateUserRequest;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +36,9 @@ public class UserController {
 
     @Autowired
     private AdminAccessService adminAccessService;
+
+    @Autowired
+    private EventRepository eventRepository;
 
     @PostMapping
     public ResponseEntity<?> createUser(@Valid @RequestBody CreateUserRequest request) { //CreateUserRequest is a DTO that contains the fields needed to create a user
@@ -130,12 +135,14 @@ public class UserController {
         }).orElse(ResponseEntity.notFound().build());
     }
 
+    @Transactional
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteUser(@PathVariable Long id) {
         if (!isSelfOrAdmin(id)) {
             return ResponseEntity.status(403).build();
         }
         return userRepository.findById(id).map(user -> {
+            eventRepository.deleteByUserId(id);
             userRepository.delete(user);
             return ResponseEntity.ok().build();
         }).orElse(ResponseEntity.notFound().build());

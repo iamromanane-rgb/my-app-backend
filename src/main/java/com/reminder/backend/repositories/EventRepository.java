@@ -2,6 +2,8 @@ package com.reminder.backend.repositories;
 
 import com.reminder.backend.models.Event;
 
+import jakarta.transaction.Transactional;
+
 import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -23,6 +25,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     List<Event> findByUserIdAndDescriptionContainingIgnoreCase(Long userId, String keyword);
     
+    @Transactional
     @Modifying
     @Query("DELETE FROM Event e WHERE e.user.id = :userId")
     void deleteByUserId(@Param("userId") Long userId);

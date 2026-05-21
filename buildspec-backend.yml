@@ -3,25 +3,25 @@ version: 0.2
 phases:
   pre_build:
     commands:
-      - echo "--- Phase 1: Authentication (Backend) ---"
-      - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 629003555230.dkr.ecr.ap-south-1.amazonaws.com
+      - echo "Phase 1 - Backend Authentication"
+      - aws ecr get-login-password --region ap-south-1 > /tmp/ecr_login.txt
+      - cat /tmp/ecr_login.txt | docker login --username AWS --password-stdin 629003555230.dkr.ecr.ap-south-1.amazonaws.com
       - REPOSITORY_URI=629003555230.dkr.ecr.ap-south-1.amazonaws.com/community-reminder-backend
       - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
 
   build:
     commands:
-      - echo "--- Phase 2: Building the Backend Container ---"
-      - docker build -t $REPOSITORY_URI:latest -f backend/Dockerfile backend/
+      - echo "Phase 2 - Building Backend Container"
+      - docker build -t $REPOSITORY_URI:latest -f Dockerfile .
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
 
   post_build:
     commands:
-      - echo "--- Phase 3: Pushing to the ECR Vault ---"
+      - echo "Phase 3 - Pushing to ECR"
       - docker push $REPOSITORY_URI:latest
       - docker push $REPOSITORY_URI:$IMAGE_TAG
-      - echo "Writing image definitions file for ECS..."
-      - printf '[{"name":"backend-container","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions-backend.json
+      - printf '[{"name":"backend-container","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
 
 artifacts:
   files:
-    - imagedefinitions-backend.json
+    - imagedefinitions.json

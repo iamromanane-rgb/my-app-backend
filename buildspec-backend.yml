@@ -20,7 +20,7 @@ phases:
   post_build:
     commands:
       - echo "Phase 3 - Pushing to ECR"
-      - REPOSITORY_URI=629003555230.dkr.ecr.ap-south-1.amazonaws.com/community-reminder-backend
+      - REPOSITORY_URI=629003555230.dkr.ecr.ap-south-1.amazonaws.com/community-backend-repository
       - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - docker push $REPOSITORY_URI:latest
       - docker push $REPOSITORY_URI:$IMAGE_TAG

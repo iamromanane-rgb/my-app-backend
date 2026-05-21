@@ -4,8 +4,8 @@ phases:
   pre_build:
     commands:
       - echo "Phase 1 - Backend Authentication"
-      - aws ecr get-login-password --region ap-south-1 > /tmp/ecr_login.txt
-      - cat /tmp/ecr_login.txt | docker login --username AWS --password-stdin 629003555230.dkr.ecr.ap-south-1.amazonaws.com
+      - aws ecr get-login-password --region eu-north-1 > /tmp/ecr_login.txt
+      - cat /tmp/ecr_login.txt | docker login --username AWS --password-stdin 629003555230.dkr.ecr.eu-north-1.amazonaws.com
       - REPOSITORY_URI=629003555230.dkr.ecr.eu-north-1.amazonaws.com/community-backend-repository
       - IMAGE_TAG=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
 

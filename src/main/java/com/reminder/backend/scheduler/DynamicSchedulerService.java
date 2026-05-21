@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.concurrent.ScheduledFuture;
 
-@Service //loads the class automatically
+@Service 
 public class DynamicSchedulerService {
 
     private final TaskScheduler taskScheduler;

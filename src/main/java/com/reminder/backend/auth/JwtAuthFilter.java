@@ -28,7 +28,6 @@ public class JwtAuthFilter extends OncePerRequestFilter { //happens only once ev
     public JwtAuthFilter(JwtService jwtService, UserRepository userRepository) {
         this.jwtService = jwtService;
         this.userRepository = userRepository;
-
     }
 
     @Override

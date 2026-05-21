@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/scheduler")
 @CrossOrigin(origins = "http://localhost:3000")
 @SecurityRequirement(name = "bearerAuth") // swagger-ui documentation annotation
-public class SchedulerController {
+public class
+SchedulerController {
 
     private final DynamicSchedulerService dynamicSchedulerService;
     private final AdminAccessService adminAccessService;
